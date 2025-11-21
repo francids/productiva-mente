@@ -1,4 +1,4 @@
-import { Component, inject, signal } from "@angular/core";
+import { Component, inject, signal, OnInit } from "@angular/core";
 import {
   FormBuilder,
   FormsModule,
@@ -82,7 +82,7 @@ import { DialogRef } from "../../services/dialog.service";
     ReactiveFormsModule,
   ],
 })
-export class NewTaskDialogComponent {
+export class NewTaskDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   dialogRef!: DialogRef;
   data!: { title: string; description: string };

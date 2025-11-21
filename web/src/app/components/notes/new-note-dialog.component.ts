@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, signal, inject } from "@angular/core";
 import { FormBuilder, Validators, ReactiveFormsModule } from "@angular/forms";
 import { CommonModule } from "@angular/common";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { DialogRef } from "../../services/dialog.service";
 
 @Component({
@@ -58,7 +58,7 @@ import { DialogRef } from "../../services/dialog.service";
     ReactiveFormsModule,
   ],
 })
-export class NewNoteDialogComponent {
+export class NewNoteDialogComponent implements OnInit {
   dialogRef!: DialogRef;
   data!: { title: string };
   private readonly fb = inject(FormBuilder);

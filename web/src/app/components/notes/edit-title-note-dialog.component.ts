@@ -1,4 +1,4 @@
-import { Component, inject, signal } from "@angular/core";
+import { Component, inject, signal, OnInit } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import {
   ReactiveFormsModule,
@@ -61,7 +61,7 @@ import { DialogRef } from "../../services/dialog.service";
     ReactiveFormsModule,
   ],
 })
-export class EditTitleNoteDialogComponent {
+export class EditTitleNoteDialogComponent implements OnInit {
   private readonly fb = inject(FormBuilder);
   dialogRef!: DialogRef;
   data!: { title: string };

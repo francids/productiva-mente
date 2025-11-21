@@ -1,12 +1,9 @@
-import { Injectable, signal } from "@angular/core";
+import { Injectable } from "@angular/core";
 
 @Injectable({
   providedIn: "root",
 })
 export class SnackbarService {
-  private snackbarVisible = signal(false);
-  private snackbarMessage = signal("");
-  
   open(message: string, action?: string, options?: { duration?: number }): void {
     const snackbar = document.createElement("div");
     snackbar.className = "snackbar";

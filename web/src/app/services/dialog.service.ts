@@ -1,4 +1,4 @@
-import { Injectable, signal, ComponentRef, Type, Injector, createComponent, ApplicationRef, inject } from "@angular/core";
+import { Injectable, ComponentRef, Type, Injector, createComponent, ApplicationRef, inject } from "@angular/core";
 
 export interface DialogConfig {
   data?: any;
@@ -17,7 +17,6 @@ export interface DialogRef<T = any> {
 export class DialogService {
   private appRef = inject(ApplicationRef);
   private injector = inject(Injector);
-  private openDialogs = signal<ComponentRef<any>[]>([]);
 
   open<T, R = any>(component: Type<T>, config?: DialogConfig): DialogRef<R> {
     const containerDiv = document.createElement("div");
