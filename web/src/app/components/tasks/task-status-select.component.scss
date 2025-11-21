@@ -1,19 +1,33 @@
 .task-status-select {
   padding: 0.5rem;
   border-radius: 0.5rem;
+  border: 1px solid var(--border-color);
+  font-size: 0.875rem;
 
   &.no-started {
-    background-color: var(--mat-sys-color-surface);
-    color: var(--mat-sys-color-on-surface);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
   }
 
   &.in-progress {
-    background-color: var(--mat-sys-color-secondary-container);
-    color: var(--mat-sys-color-on-secondary-container);
+    background-color: #fff3e0;
+    color: #e65100;
   }
 
   &.completed {
-    background-color: var(--mat-sys-color-primary-container);
-    color: var(--mat-sys-color-on-primary-container);
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+}
+
+.dark-theme .task-status-select {
+  &.in-progress {
+    background-color: #4a3c1f;
+    color: #ffb74d;
+  }
+
+  &.completed {
+    background-color: #1b3a1f;
+    color: #66bb6a;
   }
 }

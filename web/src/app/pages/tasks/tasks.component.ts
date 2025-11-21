@@ -5,22 +5,15 @@ import {
   inject,
   signal,
   effect,
-  ViewChild,
 } from "@angular/core";
 import { FormsModule } from "@angular/forms";
+import { CommonModule } from "@angular/common";
 
 // Services
 import { TasksService } from "../../services/tasks.service";
 import { TitleService } from "../../services/title.service";
-
-// Material Components
-import { MatTableDataSource, MatTableModule } from "@angular/material/table";
-import { MatSelectModule } from "@angular/material/select";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
-import { MatSort, MatSortModule } from "@angular/material/sort";
-import { MatDialog } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { DialogService } from "../../services/dialog.service";
+import { SnackbarService } from "../../services/snackbar.service";
 
 // Utils
 import { v4 as uuidv4 } from "uuid";
@@ -39,12 +32,8 @@ import { TaskStatusSelectComponent } from "../../components/tasks/task-status-se
   templateUrl: "./tasks.component.html",
   styleUrl: "./tasks.component.scss",
   imports: [
-    MatTableModule,
-    MatSelectModule,
+    CommonModule,
     FormsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSortModule,
     TaskStatusSelectComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -53,22 +42,46 @@ import { TaskStatusSelectComponent } from "../../components/tasks/task-status-se
 export class TasksComponent {
   private readonly titleService = inject(TitleService);
   private readonly tasksService = inject(TasksService);
-  private readonly dialog = inject(MatDialog);
-  private readonly snackBar = inject(MatSnackBar);
-
-  @ViewChild(MatSort) set matSort(sort: MatSort) {
-    this.dataSource().sort = sort;
-  }
+  private readonly dialog = inject(DialogService);
+  private readonly snackbar = inject(SnackbarService);
 
   readonly tasks = this.tasksService.tasks;
-  readonly dataSource = signal(new MatTableDataSource<Task>([]));
-  readonly displayedColumns = ["title", "description", "status", "actions"];
+  readonly sortedTasks = signal<Task[]>([]);
+  readonly sortColumn = signal<keyof Task | null>(null);
+  readonly sortDirection = signal<"asc" | "desc">("asc");
 
   constructor() {
     this.titleService.updateTitle($localize`:@@tasks:Tareas`);
     effect(() => {
-      this.dataSource().data = this.tasks();
+      this.updateSortedTasks();
     });
+  }
+
+  updateSortedTasks() {
+    const tasks = [...this.tasks()];
+    const column = this.sortColumn();
+    const direction = this.sortDirection();
+
+    if (column) {
+      tasks.sort((a, b) => {
+        const aVal = a[column];
+        const bVal = b[column];
+        const comparison = aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+        return direction === "asc" ? comparison : -comparison;
+      });
+    }
+
+    this.sortedTasks.set(tasks);
+  }
+
+  sortBy(column: keyof Task) {
+    if (this.sortColumn() === column) {
+      this.sortDirection.set(this.sortDirection() === "asc" ? "desc" : "asc");
+    } else {
+      this.sortColumn.set(column);
+      this.sortDirection.set("asc");
+    }
+    this.updateSortedTasks();
   }
 
   async createTask(title: string, description: string): Promise<void> {
@@ -92,7 +105,7 @@ export class TasksComponent {
     const dialogRef = this.dialog.open(NewTaskDialogComponent, {
       data: { title: "", description: "" },
     });
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.afterClosed().then(async (result) => {
       if (result) {
         await this.createTask(result.title, result.description);
       }
@@ -103,7 +116,7 @@ export class TasksComponent {
     const dialogRef = this.dialog.open(EditTaskDialogComponent, {
       data: { title: task.title, description: task.description },
     });
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.afterClosed().then(async (result) => {
       if (result) {
         await this.updateTask({ ...task, ...result });
       }
@@ -114,10 +127,10 @@ export class TasksComponent {
     const dialogRef = this.dialog.open(DelTaskDialogComponent, {
       data: taskId,
     });
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.afterClosed().then(async (result) => {
       if (result) {
         await this.tasksService.deleteTask(taskId);
-        this.snackBar.open(
+        this.snackbar.open(
           $localize`:@@tasks.task-deleted:Tarea eliminada`,
           $localize`:@@common.ok:Cerrar`,
           { duration: 2000 }

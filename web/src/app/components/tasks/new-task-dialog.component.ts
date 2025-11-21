@@ -5,90 +5,100 @@ import {
   ReactiveFormsModule,
   Validators,
 } from "@angular/forms";
-import { MatButtonModule } from "@angular/material/button";
-import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef,
-} from "@angular/material/dialog";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
+import { CommonModule } from "@angular/common";
+import { DialogRef } from "../../services/dialog.service";
 
 @Component({
   selector: "new-task-dialog",
   template: `
-    <h2 mat-dialog-title i18n="@@dialogs.create-task">Crear tarea</h2>
-    <mat-dialog-content>
-      <form
-        [formGroup]="taskForm()"
-        (ngSubmit)="taskForm().valid && onSaveClick()"
-      >
-        <mat-form-field>
-          <mat-label i18n="@@dialogs.task-title">Título de la tarea</mat-label>
-          <input matInput formControlName="title" />
-          @if (taskForm().get('title')!.hasError('required')) {
-          <mat-error i18n="@@dialogs.error.title-required"
-            >El título es obligatorio.</mat-error
-          >
-          }
-        </mat-form-field>
-        <mat-form-field>
-          <mat-label i18n="@@dialogs.task-description"
-            >Descripción de la tarea</mat-label
-          >
-          <textarea matInput formControlName="description"></textarea>
-          @if (taskForm().get('description')!.hasError('required')) {
-          <mat-error i18n="@@dialogs.error.description-required"
-            >La descripción es obligatoria.</mat-error
-          >
-          }
-        </mat-form-field>
-      </form>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-      <button mat-button (click)="onNoClick()" i18n="@@dialogs.cancel">
-        Cancelar
-      </button>
-      <button
-        mat-button
-        (click)="onSaveClick()"
-        [disabled]="taskForm().invalid"
-        i18n="@@dialogs.save"
-      >
-        Guardar
-      </button>
-    </mat-dialog-actions>
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2 class="modal-title" i18n="@@dialogs.create-task">Crear tarea</h2>
+      <div class="modal-content">
+        <form
+          [formGroup]="taskForm()"
+          (ngSubmit)="taskForm().valid && onSaveClick()"
+        >
+          <div class="form-field">
+            <label i18n="@@dialogs.task-title">Título de la tarea</label>
+            <input type="text" formControlName="title" />
+            @if (taskForm().get('title')!.hasError('required') && taskForm().get('title')!.touched) {
+            <span class="error" i18n="@@dialogs.error.title-required"
+              >El título es obligatorio.</span
+            >
+            }
+          </div>
+          <div class="form-field">
+            <label i18n="@@dialogs.task-description"
+              >Descripción de la tarea</label
+            >
+            <textarea formControlName="description" rows="3"></textarea>
+            @if (taskForm().get('description')!.hasError('required') && taskForm().get('description')!.touched) {
+            <span class="error" i18n="@@dialogs.error.description-required"
+              >La descripción es obligatoria.</span
+            >
+            }
+          </div>
+        </form>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary" (click)="onNoClick()" i18n="@@dialogs.cancel">
+          Cancelar
+        </button>
+        <button
+          (click)="onSaveClick()"
+          [disabled]="taskForm().invalid"
+          i18n="@@dialogs.save"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
   `,
   styles: [
     `
       form {
         display: flex;
         flex-direction: column;
-        align-items: flex-start;
+        gap: 1rem;
+      }
+      .form-field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+      .form-field input,
+      .form-field textarea {
+        width: 100%;
+      }
+      .error {
+        color: var(--error-color);
+        font-size: 0.75rem;
       }
     `,
   ],
   imports: [
-    MatDialogModule,
+    CommonModule,
     FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
     ReactiveFormsModule,
   ],
 })
 export class NewTaskDialogComponent {
   private readonly fb = inject(FormBuilder);
-  readonly dialogRef = inject(MatDialogRef<NewTaskDialogComponent>);
-  readonly data = inject<{ title: string; description: string }>(
-    MAT_DIALOG_DATA
-  );
+  dialogRef!: DialogRef;
+  data!: { title: string; description: string };
+  
   readonly taskForm = signal(
     this.fb.group({
-      title: [this.data.title, [Validators.required]],
-      description: [this.data.description, [Validators.required]],
+      title: ["", [Validators.required]],
+      description: ["", [Validators.required]],
     })
   );
+
+  ngOnInit() {
+    if (this.data) {
+      this.taskForm().patchValue(this.data);
+    }
+  }
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -97,6 +107,8 @@ export class NewTaskDialogComponent {
   onSaveClick(): void {
     if (this.taskForm().valid) {
       this.dialogRef.close(this.taskForm().value);
+    } else {
+      this.taskForm().markAllAsTouched();
     }
   }
 }

@@ -8,10 +8,8 @@ import {
 } from "@angular/core";
 import { provideRouter } from "@angular/router";
 import { routes } from "./app.routes";
-import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 import { provideServiceWorker } from "@angular/service-worker";
 import { BrowserModule } from "@angular/platform-browser";
-import { provideAnimations } from "@angular/platform-browser/animations";
 import { ThemeService } from "./services/theme.service";
 import { DexieService } from "./services/db.service";
 
@@ -27,7 +25,6 @@ export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
     provideRouter(routes),
-    provideAnimationsAsync(),
     provideServiceWorker("ngsw-worker.js", {
       enabled: !isDevMode(),
       registrationStrategy: "registerWhenStable:30000",
@@ -41,6 +38,5 @@ export const appConfig: ApplicationConfig = {
       const initializerFn = initializeTheme(inject(ThemeService));
       return initializerFn();
     }),
-    provideAnimations(),
   ],
 };

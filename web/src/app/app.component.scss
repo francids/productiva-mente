@@ -1,64 +1,125 @@
-mat-toolbar {
-  flex-shrink: 0;
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  user-select: none;
-}
-
-.router-outlet-container {
+.app-container {
   display: flex;
-  flex-grow: 1;
-}
-
-mat-drawer-content {
-  display: flex;
-  flex-direction: column;
   height: 100vh;
-}
-
-mat-divider {
-  opacity: 0.3;
-  margin-right: 1rem;
-  margin-left: 1rem;
+  overflow: hidden;
 }
 
 .sidenav {
-  padding: 10px;
-  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 280px;
+  height: 100vh;
+  background-color: var(--bg-primary);
+  border-right: 1px solid var(--border-color);
+  padding: 1rem;
+  overflow-y: auto;
+  transition: left 0.3s ease;
+  z-index: 1001;
   user-select: none;
+}
+
+.sidenav.open {
+  left: 0;
 }
 
 @media (max-width: 600px) {
   .sidenav {
     width: 80%;
+    left: -80%;
   }
 }
 
-.sidenav .top {
+.sidenav-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.sidenav-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 1rem;
+  margin-bottom: 1rem;
+}
+
+.sidenav hr {
+  margin: 1rem 0;
+  opacity: 0.3;
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.nav-list li {
+  margin: 0;
+}
+
+.nav-list a {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: var(--text-primary);
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  gap: 0.75rem;
+}
+
+.nav-list a:hover {
+  background-color: var(--bg-secondary);
+}
+
+.nav-list a.active {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.nav-icon {
+  font-size: 1.25rem;
+  display: inline-block;
+  width: 1.5rem;
+  text-align: center;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  user-select: none;
+}
+
+.router-outlet-container {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
 }
 
 a {
   color: inherit;
   text-decoration: inherit;
-}
-
-mat-nav-list {
-  width: 100%;
-}
-
-mat-list-item {
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: auto;
-}
-
-mat-list-item mat-icon {
-  margin-right: 10px;
 }

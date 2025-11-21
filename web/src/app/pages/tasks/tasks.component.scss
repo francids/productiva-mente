@@ -15,7 +15,16 @@ main {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
-  z-index: 1000;
+  z-index: 100;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  font-size: 2rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px var(--shadow);
 }
 
 .no-tasks {
@@ -26,4 +35,26 @@ main {
   width: 100%;
   height: 100%;
   user-select: none;
+}
+
+table {
+  margin-top: 1rem;
+}
+
+th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+th.sortable:hover {
+  background-color: var(--bg-secondary);
+}
+
+.sort-icon {
+  margin-left: 0.5rem;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
 }

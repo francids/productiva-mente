@@ -1,93 +1,146 @@
-<mat-drawer-container class="container" autosize>
-  <mat-drawer #drawer class="sidenav" mode="over">
-    <div class="top">
-      <a routerLink="/" (click)="drawer.toggle()">
+<div class="app-container">
+  <!-- Sidenav Overlay -->
+  @if (sidenavOpen()) {
+  <div class="sidenav-overlay" (click)="closeSidenav()"></div>
+  }
+
+  <!-- Sidenav -->
+  <nav class="sidenav" [class.open]="sidenavOpen()">
+    <div class="sidenav-header">
+      <a routerLink="/" (click)="closeSidenav()">
         <app-logo width="100%" height="20px"></app-logo>
       </a>
-      <button mat-icon-button (click)="drawer.toggle()">
-        <mat-icon>close</mat-icon>
+      <button class="icon-button" (click)="closeSidenav()" aria-label="Close menu">
+        ✕
       </button>
     </div>
-    <mat-divider></mat-divider>
-    <mat-nav-list role="list">
-      <a
-        mat-list-item
-        routerLink="/"
-        (click)="drawer.toggle()"
-        [activated]="currentRoute() === '/'"
-      >
-        <mat-icon matListItemIcon> home </mat-icon>
-        <div matListItemTitle i18n="@@home">Inicio</div>
-      </a>
-      <a
-        mat-list-item
-        routerLink="/notes"
-        (click)="drawer.toggle()"
-        [activated]="currentRoute() === '/notes'"
-      >
-        <mat-icon matListItemIcon>notes</mat-icon>
-        <div matListItemTitle i18n="@@notes">Notas</div>
-      </a>
-      <a
-        mat-list-item
-        routerLink="/tasks"
-        (click)="drawer.toggle()"
-        [activated]="currentRoute() === '/tasks'"
-      >
-        <mat-icon matListItemIcon>task_alt</mat-icon>
-        <div matListItemTitle i18n="@@tasks">Tareas</div>
-      </a>
-    </mat-nav-list>
-    <mat-divider></mat-divider>
-    <mat-nav-list role="list">
-      <a
-        mat-list-item
-        routerLink="/settings"
-        (click)="drawer.toggle()"
-        [activated]="currentRoute() === '/settings'"
-      >
-        <mat-icon matListItemIcon> settings </mat-icon>
-        <div matListItemTitle i18n="@@settings">Configuración</div>
-      </a>
-    </mat-nav-list>
-    <mat-divider></mat-divider>
-    <mat-nav-list role="list">
-      <a
-        mat-list-item
-        routerLink="/about"
-        (click)="drawer.toggle()"
-        [activated]="currentRoute() === '/about'"
-      >
-        <mat-icon matListItemIcon> info </mat-icon>
-        <div matListItemTitle i18n="@@about">Acerca de</div>
-      </a>
-      <a
-        mat-list-item
-        href="https://github.com/francids/productiva-mente"
-        target="_blank"
-        (click)="drawer.toggle()"
-      >
-        <mat-icon matListItemIcon> code </mat-icon>
-        <div matListItemTitle i18n="@@sourceCode">Código fuente</div>
-      </a>
-    </mat-nav-list>
-  </mat-drawer>
+    <hr>
+    <ul class="nav-list">
+      <li>
+        <a
+          routerLink="/"
+          (click)="closeSidenav()"
+          [class.active]="currentRoute() === '/'"
+        >
+          <span class="nav-icon">🏠</span>
+          <span i18n="@@home">Inicio</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/notes"
+          (click)="closeSidenav()"
+          [class.active]="currentRoute() === '/notes'"
+        >
+          <span class="nav-icon">📝</span>
+          <span i18n="@@notes">Notas</span>
+        </a>
+      </li>
+      <li>
+        <a
+          routerLink="/tasks"
+          (click)="closeSidenav()"
+          [class.active]="currentRoute() === '/tasks'"
+        >
+          <span class="nav-icon">✓</span>
+          <span i18n="@@tasks">Tareas</span>
+        </a>
+      </li>
+    </ul>
+    <hr>
+    <ul class="nav-list">
+      <li>
+        <a
+          routerLink="/settings"
+          (click)="closeSidenav()"
+          [class.active]="currentRoute() === '/settings'"
+        >
+          <span class="nav-icon">⚙</span>
+          <span i18n="@@settings">Configuración</span>
+        </a>
+      </li>
+    </ul>
+    <hr>
+    <ul class="nav-list">
+      <li>
+        <a
+          routerLink="/about"
+          (click)="closeSidenav()"
+          [class.active]="currentRoute() === '/about'"
+        >
+          <span class="nav-icon">ℹ</span>
+          <span i18n="@@about">Acerca de</span>
+        </a>
+      </li>
+      <li>
+        <a
+          href="https://github.com/francids/productiva-mente"
+          target="_blank"
+          (click)="closeSidenav()"
+        >
+          <span class="nav-icon">&lt;/&gt;</span>
+          <span i18n="@@sourceCode">Código fuente</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
 
-  <mat-drawer-content>
+  <!-- Main Content -->
+  <div class="main-content">
     @if (!isEditPage()) {
-    <mat-toolbar>
-      <button mat-icon-button (click)="drawer.toggle()">
-        <mat-icon>menu</mat-icon>
+    <header class="toolbar">
+      <button class="icon-button" (click)="toggleSidenav()" aria-label="Toggle menu">
+        ☰
       </button>
       @if (title() === "Productiva Mente") {
       <app-logo width="100%" height="18px"></app-logo>
       } @else {
       <span>{{ title() }}</span>
       }
-    </mat-toolbar>
+    </header>
     }
     <div class="router-outlet-container">
       <router-outlet></router-outlet>
     </div>
-  </mat-drawer-content>
-</mat-drawer-container>
+  </div>
+
+  <!-- Welcome Dialog -->
+  @if (showWelcomeDialog()) {
+  <div class="modal-overlay" (click)="closeWelcomeDialog()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2 class="modal-title" i18n="@@dialogs.welcome.title">
+        ¡Bienvenido a Productiva Mente!
+      </h2>
+      <div class="modal-content">
+        <p i18n="@@dialogs.welcome.description">
+          Productiva Mente es una aplicación web para la gestión de tareas y
+          notas.
+        </p>
+        <p>
+          <strong i18n="@@dialogs.welcome.features"
+            >Características principales:</strong
+          >
+        </p>
+        <ul>
+          <li i18n="@@dialogs.welcome.feature1">
+            Gestión de notas con editor Markdown
+          </li>
+          <li i18n="@@dialogs.welcome.feature2">
+            Organización de tareas con prioridades
+          </li>
+          <li i18n="@@dialogs.welcome.feature3">
+            Almacenamiento local para garantizar tu privacidad
+          </li>
+          <li i18n="@@dialogs.welcome.feature4">Modo oscuro</li>
+          <li i18n="@@dialogs.welcome.feature5">Funcionamiento sin conexión</li>
+        </ul>
+      </div>
+      <div class="modal-actions">
+        <button (click)="closeWelcomeDialog()" i18n="@@dialogs.welcome.close">
+          Comenzar
+        </button>
+      </div>
+    </div>
+  </div>
+  }
+</div>

@@ -13,22 +13,13 @@ import {
   Router,
   NavigationEnd,
 } from "@angular/router";
+import { CommonModule } from "@angular/common";
 
 // RxJS
 import { filter } from "rxjs/operators";
 
-// Modules
-import { MatToolbarModule } from "@angular/material/toolbar";
-import { MatIconModule } from "@angular/material/icon";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatButtonModule } from "@angular/material/button";
-import { MatSidenavModule } from "@angular/material/sidenav";
-import { MatListModule } from "@angular/material/list";
-import { MatDialog } from "@angular/material/dialog";
-
 // Components
 import { LogoComponent } from "./components/logo/logo.component";
-import { WelcomeDialogComponent } from "./components/welcome/welcome-dialog.component";
 
 // Services
 import { TitleService } from "./services/title.service";
@@ -39,12 +30,7 @@ import { FirstVisitService } from "./services/first-visit.service";
   imports: [
     RouterLink,
     RouterOutlet,
-    MatToolbarModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatIconModule,
-    MatListModule,
-    MatDividerModule,
+    CommonModule,
     LogoComponent,
   ],
   templateUrl: "./app.component.html",
@@ -55,10 +41,11 @@ export class AppComponent {
   private router = inject(Router);
   private titleService = inject(TitleService);
   private firstVisitService = inject(FirstVisitService);
-  private dialog = inject(MatDialog);
 
   title = signal("Productiva Mente");
   currentRoute = signal("");
+  sidenavOpen = signal(false);
+  showWelcomeDialog = signal(false);
 
   isEditPage = computed(() => this.currentRoute().includes("/notes/edit"));
 
@@ -80,16 +67,22 @@ export class AppComponent {
     effect(() => {
       if (this.firstVisitService.isFirstVisit()) {
         setTimeout(() => {
-          const dialogRef = this.dialog.open(WelcomeDialogComponent, {
-            width: "450px",
-            disableClose: true,
-          });
-
-          dialogRef.afterClosed().subscribe(() => {
-            this.firstVisitService.setVisited();
-          });
+          this.showWelcomeDialog.set(true);
         }, 1000);
       }
     });
+  }
+
+  toggleSidenav() {
+    this.sidenavOpen.update(v => !v);
+  }
+
+  closeSidenav() {
+    this.sidenavOpen.set(false);
+  }
+
+  closeWelcomeDialog() {
+    this.showWelcomeDialog.set(false);
+    this.firstVisitService.setVisited();
   }
 }
