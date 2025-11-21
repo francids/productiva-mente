@@ -1,31 +1,31 @@
 <main class="custom-container">
-  <h2 class="mat-headline-medium" i18n="@@settings.appearance">Apariencia</h2>
-  <mat-card appearance="outlined">
-    <mat-card-content>
-      <div class="settings-item">
-        <span i18n="@@settings.appearance.followSystem">Seguir sistema</span>
-        <mat-slide-toggle
-          [hideIcon]="true"
+  <h2 i18n="@@settings.appearance">Apariencia</h2>
+  <div class="card">
+    <div class="settings-item">
+      <span i18n="@@settings.appearance.followSystem">Seguir sistema</span>
+      <label class="toggle">
+        <input
+          type="checkbox"
           [checked]="isAutoMode()"
           (change)="toggleAutoMode($event)"
-        >
-        </mat-slide-toggle>
-      </div>
+        />
+        <span class="slider"></span>
+      </label>
+    </div>
 
-      @if (!isAutoMode()) {
-      <mat-divider class="settings-divider"></mat-divider>
-      <div class="settings-item">
-        <span i18n="@@settings.appearance.darkTheme">Tema oscuro</span>
-        <mat-slide-toggle
-          [hideIcon]="true"
+    @if (!isAutoMode()) {
+    <hr class="settings-divider">
+    <div class="settings-item">
+      <span i18n="@@settings.appearance.darkTheme">Tema oscuro</span>
+      <label class="toggle">
+        <input
+          type="checkbox"
           [checked]="isDarkMode()"
           (change)="toggleDarkMode($event)"
-        >
-        </mat-slide-toggle>
-      </div>
-      }
-    </mat-card-content>
-  </mat-card>
-
-  <mat-divider class="no-visible"></mat-divider>
+        />
+        <span class="slider"></span>
+      </label>
+    </div>
+    }
+  </div>
 </main>

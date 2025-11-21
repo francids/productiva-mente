@@ -17,7 +17,16 @@ main {
   position: fixed;
   bottom: 1rem;
   right: 1rem;
-  z-index: 1000;
+  z-index: 100;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  font-size: 2rem;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px var(--shadow);
 }
 
 article {
@@ -43,23 +52,28 @@ article {
 article.list-notes .note {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
+  padding: 0.5rem;
+  min-width: 300px;
 }
 
 article.list-notes .note .card-note {
   cursor: pointer;
-  width: 300px;
-  min-width: 300px;
-  max-width: 300px;
+  flex: 1;
   min-height: 60px;
-  height: 60px;
-  padding-right: 1rem;
-  padding-left: 1rem;
+  display: flex;
+  align-items: center;
+  padding: 1rem;
 }
 
-article.list-notes .note .card-note mat-card-content {
+article.list-notes .note .note-content {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+article.list-notes .note .note-menu {
+  display: flex;
+  gap: 0.25rem;
 }

@@ -1,65 +1,79 @@
 import { ChangeDetectionStrategy, signal, inject } from "@angular/core";
 import { FormBuilder, Validators, ReactiveFormsModule } from "@angular/forms";
-import { MatButtonModule } from "@angular/material/button";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { MatDialogModule } from "@angular/material/dialog";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
-
+import { CommonModule } from "@angular/common";
 import { Component } from "@angular/core";
+import { DialogRef } from "../../services/dialog.service";
 
 @Component({
   selector: "new-note-dialog",
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <h2 mat-dialog-title i18n="@@dialogs.create-note">Crear nota</h2>
-    <mat-dialog-content>
-      <form [formGroup]="titleForm()" (ngSubmit)="onSaveClick()">
-        <mat-form-field>
-          <mat-label i18n="@@dialogs.note-title">Título de la nota</mat-label>
-          <input matInput formControlName="title" />
-          @if (titleForm().get('title')?.hasError('required')) {
-          <mat-error i18n="@@dialogs.error.title-required">
-            El título es obligatorio.
-          </mat-error>
-          }
-        </mat-form-field>
-      </form>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-      <button mat-button (click)="onNoClick()" i18n="@@dialogs.cancel">
-        Cancelar
-      </button>
-      <button
-        mat-button
-        type="submit"
-        [disabled]="titleForm().invalid"
-        i18n="@@dialogs.save"
-        (click)="onSaveClick()"
-      >
-        Guardar
-      </button>
-    </mat-dialog-actions>
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2 class="modal-title" i18n="@@dialogs.create-note">Crear nota</h2>
+      <div class="modal-content">
+        <form [formGroup]="titleForm()" (ngSubmit)="onSaveClick()">
+          <div class="form-field">
+            <label i18n="@@dialogs.note-title">Título de la nota</label>
+            <input type="text" formControlName="title" />
+            @if (titleForm().get('title')?.hasError('required') && titleForm().get('title')?.touched) {
+            <span class="error" i18n="@@dialogs.error.title-required">
+              El título es obligatorio.
+            </span>
+            }
+          </div>
+        </form>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary" (click)="onNoClick()" i18n="@@dialogs.cancel">
+          Cancelar
+        </button>
+        <button
+          type="submit"
+          [disabled]="titleForm().invalid"
+          i18n="@@dialogs.save"
+          (click)="onSaveClick()"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
   `,
+  styles: [`
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .form-field input {
+      width: 100%;
+    }
+    .error {
+      color: var(--error-color);
+      font-size: 0.75rem;
+    }
+  `],
   imports: [
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
+    CommonModule,
     ReactiveFormsModule,
   ],
 })
 export class NewNoteDialogComponent {
-  readonly dialogRef = inject(MatDialogRef<NewNoteDialogComponent>);
-  readonly data = inject<{ title: string }>(MAT_DIALOG_DATA);
+  dialogRef!: DialogRef;
+  data!: { title: string };
   private readonly fb = inject(FormBuilder);
 
   readonly titleForm = signal(
     this.fb.group({
-      title: [this.data.title, [Validators.required]],
+      title: ["", [Validators.required]],
     })
   );
+
+  ngOnInit() {
+    if (this.data) {
+      this.titleForm().patchValue({ title: this.data.title });
+    }
+  }
 
   onNoClick() {
     this.dialogRef.close();
@@ -68,6 +82,8 @@ export class NewNoteDialogComponent {
   onSaveClick() {
     if (this.titleForm().valid) {
       this.dialogRef.close(this.titleForm().value.title);
+    } else {
+      this.titleForm().markAllAsTouched();
     }
   }
 }

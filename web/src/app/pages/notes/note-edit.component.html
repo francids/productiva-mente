@@ -1,32 +1,36 @@
 <main>
-  <mat-toolbar>
-    <button mat-icon-button routerLink="/notes">
-      <mat-icon>arrow_back</mat-icon>
+  <header class="note-toolbar">
+    <button class="icon-button" routerLink="/notes" aria-label="Back">
+      ←
     </button>
     <span class="spacer"></span>
-    <button mat-button (click)="openDialogEditTitleNote()">
+    <button class="title-button" (click)="openDialogEditTitleNote()">
       {{ this.note().title }}
     </button>
     <span class="spacer"></span>
-    <button mat-icon-button [matMenuTriggerFor]="menu">
-      <mat-icon>more_vert</mat-icon>
-    </button>
-    <mat-menu #menu="matMenu" xPosition="before">
-      <button mat-menu-item (click)="openDialogEditTitleNote()">
-        <mat-icon fontSet="material-icons-outlined">edit</mat-icon>
-        <span i18n="@@notes.edit-title">Editar título</span>
+    <div class="menu-container">
+      <button class="icon-button" (click)="toggleMenu()" aria-label="Menu">
+        ⋮
       </button>
-      <button mat-menu-item (click)="openDialogDeleteNote()">
-        <mat-icon fontSet="material-icons-outlined">delete</mat-icon>
-        <span i18n="@@notes.delete-note">Eliminar nota</span>
-      </button>
-      <mat-divider></mat-divider>
-      <button mat-menu-item (click)="exportNote()">
-        <mat-icon fontSet="material-icons-outlined">download</mat-icon>
-        <span i18n="@@notes.export-note">Exportar nota</span>
-      </button>
-    </mat-menu>
-  </mat-toolbar>
+      @if (showMenu()) {
+      <div class="dropdown-menu">
+        <button (click)="openDialogEditTitleNote()">
+          <span>✎</span>
+          <span i18n="@@notes.edit-title">Editar título</span>
+        </button>
+        <button (click)="openDialogDeleteNote()">
+          <span>🗑</span>
+          <span i18n="@@notes.delete-note">Eliminar nota</span>
+        </button>
+        <hr>
+        <button (click)="exportNote()">
+          <span>⬇</span>
+          <span i18n="@@notes.export-note">Exportar nota</span>
+        </button>
+      </div>
+      }
+    </div>
+  </header>
   <section>
     <app-editor
       [content]="note().content"

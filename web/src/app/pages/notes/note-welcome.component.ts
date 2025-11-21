@@ -6,20 +6,13 @@ import {
   signal,
 } from "@angular/core";
 import { Router } from "@angular/router";
+import { CommonModule } from "@angular/common";
 
 // Services
 import { NotesService } from "../../services/notes.service";
 import { TitleService } from "../../services/title.service";
-
-// Material Components
-import { MatDialog } from "@angular/material/dialog";
-import { MatCardModule } from "@angular/material/card";
-import { MatButtonModule } from "@angular/material/button";
-import { MatRippleModule } from "@angular/material/core";
-import { MatMenuModule } from "@angular/material/menu";
-import { MatIconModule } from "@angular/material/icon";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { CdkDrag } from "@angular/cdk/drag-drop";
+import { DialogService } from "../../services/dialog.service";
+import { SnackbarService } from "../../services/snackbar.service";
 
 // Utils
 import { v4 as uuidv4 } from "uuid";
@@ -37,12 +30,7 @@ import { DelNoteDialogComponent } from "../../components/notes/del-note-dialog.c
   templateUrl: "./note-welcome.component.html",
   styleUrl: "./note-welcome.component.scss",
   imports: [
-    MatCardModule,
-    MatButtonModule,
-    MatRippleModule,
-    MatMenuModule,
-    MatIconModule,
-    CdkDrag,
+    CommonModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,11 +38,11 @@ export class NoteWelcomeComponent {
   private readonly router = inject(Router);
   private readonly notesService = inject(NotesService);
   private readonly titleService = inject(TitleService);
+  private readonly dialog = inject(DialogService);
+  private readonly snackbar = inject(SnackbarService);
 
   readonly notes = this.notesService.notes;
-  readonly dialog = inject(MatDialog);
   readonly newNoteTitle = signal("");
-  private _snackBar = inject(MatSnackBar);
   private mouseDownTimeout: any;
 
   onMouseDown(_: MouseEvent, __: string) {
@@ -90,7 +78,7 @@ export class NoteWelcomeComponent {
       data: { title: this.newNoteTitle() },
     });
 
-    dialogRef.afterClosed().subscribe(async (result) => {
+    dialogRef.afterClosed().then(async (result) => {
       if (result) {
         this.newNoteTitle.set(result);
         await this.createNewNote(this.newNoteTitle());
@@ -103,14 +91,14 @@ export class NoteWelcomeComponent {
       data: { title: note.title },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().then((result) => {
       if (result) {
         this.notesService.updateNote(note.id, {
           id: note.id,
           title: result,
           content: note.content,
         });
-        this._snackBar.open(
+        this.snackbar.open(
           $localize`:@@notes.note-title-edited:Título de la nota editado`,
           $localize`:@@common.ok:Cerrar`,
           { duration: 2000 }
@@ -122,10 +110,10 @@ export class NoteWelcomeComponent {
   openDialogDeleteNote(note: Note): void {
     const dialogRef = this.dialog.open(DelNoteDialogComponent);
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().then((result) => {
       if (result) {
         this.notesService.deleteNote(note.id);
-        this._snackBar.open(
+        this.snackbar.open(
           $localize`:@@notes.note-deleted:Nota eliminada`,
           $localize`:@@common.ok:Cerrar`,
           { duration: 2000 }

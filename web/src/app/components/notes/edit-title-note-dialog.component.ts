@@ -1,72 +1,82 @@
 import { Component, inject, signal } from "@angular/core";
-import { FormsModule } from "@angular/forms";
-import { MatButtonModule } from "@angular/material/button";
-import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef,
-} from "@angular/material/dialog";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
+import { CommonModule } from "@angular/common";
 import {
   ReactiveFormsModule,
   FormBuilder,
-  FormGroup,
   Validators,
 } from "@angular/forms";
+import { DialogRef } from "../../services/dialog.service";
 
 @Component({
   selector: "edit-title-note-dialog",
   template: `
-    <h2 mat-dialog-title i18n="@@dialogs.edit-note-title">Editar título</h2>
-    <mat-dialog-content>
-      <form
-        [formGroup]="titleForm()"
-        (ngSubmit)="titleForm().valid && onSaveClick()"
-      >
-        <mat-form-field>
-          <mat-label i18n="@@dialogs.note-title">Título de la nota</mat-label>
-          <input matInput formControlName="title" />
-          @if (titleForm().get('title')!.hasError('required')) {
-          <mat-error i18n="@@dialogs.error.title-required"
-            >El título es obligatorio.</mat-error
-          >
-          }
-        </mat-form-field>
-      </form>
-    </mat-dialog-content>
-    <mat-dialog-actions>
-      <button mat-button (click)="onNoClick()" i18n="@@dialogs.cancel">
-        Cancelar
-      </button>
-      <button
-        mat-button
-        (click)="onSaveClick()"
-        [disabled]="titleForm().invalid"
-        i18n="@@dialogs.save"
-      >
-        Guardar
-      </button>
-    </mat-dialog-actions>
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2 class="modal-title" i18n="@@dialogs.edit-note-title">Editar título</h2>
+      <div class="modal-content">
+        <form
+          [formGroup]="titleForm()"
+          (ngSubmit)="titleForm().valid && onSaveClick()"
+        >
+          <div class="form-field">
+            <label i18n="@@dialogs.note-title">Título de la nota</label>
+            <input type="text" formControlName="title" />
+            @if (titleForm().get('title')!.hasError('required') && titleForm().get('title')!.touched) {
+            <span class="error" i18n="@@dialogs.error.title-required"
+              >El título es obligatorio.</span
+            >
+            }
+          </div>
+        </form>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary" (click)="onNoClick()" i18n="@@dialogs.cancel">
+          Cancelar
+        </button>
+        <button
+          (click)="onSaveClick()"
+          [disabled]="titleForm().invalid"
+          i18n="@@dialogs.save"
+        >
+          Guardar
+        </button>
+      </div>
+    </div>
   `,
+  styles: [`
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+    .form-field input {
+      width: 100%;
+    }
+    .error {
+      color: var(--error-color);
+      font-size: 0.75rem;
+    }
+  `],
   imports: [
-    MatDialogModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
+    CommonModule,
     ReactiveFormsModule,
   ],
 })
 export class EditTitleNoteDialogComponent {
   private readonly fb = inject(FormBuilder);
-  readonly dialogRef = inject(MatDialogRef<EditTitleNoteDialogComponent>);
-  readonly data = inject<{ title: string }>(MAT_DIALOG_DATA);
+  dialogRef!: DialogRef;
+  data!: { title: string };
+  
   readonly titleForm = signal(
     this.fb.group({
-      title: [this.data.title, [Validators.required]],
+      title: ["", [Validators.required]],
     })
   );
+
+  ngOnInit() {
+    if (this.data) {
+      this.titleForm().patchValue({ title: this.data.title });
+    }
+  }
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -80,6 +90,8 @@ export class EditTitleNoteDialogComponent {
       } else {
         this.dialogRef.close();
       }
+    } else {
+      this.titleForm().markAllAsTouched();
     }
   }
 }

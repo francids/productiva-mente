@@ -4,19 +4,29 @@
 }
 
 .box {
-  background-color: var(--mat-sys-color-surface-container);
   background: linear-gradient(
     45deg,
-    var(--mat-sys-color-surface-container) 0%,
-    var(--mat-sys-color-surface) 100%
+    var(--bg-secondary) 0%,
+    var(--bg-primary) 100%
   );
   display: flex;
   flex-grow: 1;
   align-items: end;
   justify-content: end;
   padding: 2rem;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
 }
 
-.box p {
+.box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px var(--shadow);
+}
+
+.box-title {
   margin: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-primary);
 }

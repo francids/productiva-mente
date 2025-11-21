@@ -11,20 +11,58 @@ main {
   user-select: none;
 }
 
-.no-visible {
-  opacity: 0;
-}
-
-mat-divider {
-  margin: 1rem 0;
-}
-
 .settings-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 1rem 0;
 }
 
 .settings-divider {
-  margin: 1rem 0;
+  margin: 0;
+}
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+}
+
+.toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--border-color);
+  transition: 0.3s;
+  border-radius: 24px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider {
+  background-color: var(--accent-color);
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
 }

@@ -19,11 +19,17 @@ main section {
   padding: 0;
 }
 
-mat-toolbar {
+.note-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background-color: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
   flex-shrink: 0;
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 100;
   user-select: none;
 }
 
@@ -31,21 +37,54 @@ mat-toolbar {
   flex: 1 1 auto;
 }
 
-.note-title {
-  height: 48px;
+.title-button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  color: var(--text-primary);
+}
+
+.title-button:hover {
+  background-color: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+.menu-container {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 0.5rem;
+  background-color: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  box-shadow: 0 4px 12px var(--shadow);
+  min-width: 200px;
+  z-index: 1000;
+}
+
+.dropdown-menu button {
   width: 100%;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
   display: flex;
-  justify-content: center;
   align-items: center;
-  margin: 0;
+  gap: 0.75rem;
+  cursor: pointer;
 }
 
-.note-title p {
-  margin: 0;
+.dropdown-menu button:hover {
+  background-color: var(--bg-secondary);
 }
 
-.note-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.dropdown-menu hr {
+  margin: 0.25rem 0;
 }

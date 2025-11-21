@@ -1,44 +1,34 @@
 <main>
-  <button mat-fab class="fab-button" (click)="openDialogCreateNote()">
-    <mat-icon>add</mat-icon>
+  <button class="fab-button" (click)="openDialogCreateNote()" aria-label="Add note">
+    +
   </button>
 
   @if (notes().length === 0) {
   <article>
-    <p class="mat-body-medium" i18n="@@notes.no-notes">
+    <p i18n="@@notes.no-notes">
       No tienes notas creadas, crea una nueva nota para empezar.
     </p>
   </article>
   } @else {
   <article class="list-notes">
     @for (note of notes(); track note.id) {
-    <mat-card
-      appearance="outlined"
-      class="note"
-      cdkDrag
-      cdkDragBoundary=".list-notes"
-    >
-      <mat-card
-        appearance="raised"
+    <div class="note card">
+      <div
         class="card-note"
         (mousedown)="onMouseDown($event, note.id)"
         (mouseup)="onMouseUp($event, note.id)"
-        matRipple
       >
-        <mat-card-content>{{ note.title }}</mat-card-content>
-      </mat-card>
-      <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>more_vert</mat-icon>
-      </button>
-    </mat-card>
-    <mat-menu #menu="matMenu" xPosition="before">
-      <button mat-menu-item (click)="openDialogEditTitleNote(note)">
-        <span i18n="@@notes.edit-title">Editar título</span>
-      </button>
-      <button mat-menu-item (click)="openDialogDeleteNote(note)">
-        <span i18n="@@notes.delete-note">Eliminar nota</span>
-      </button>
-    </mat-menu>
+        <div class="note-content">{{ note.title }}</div>
+      </div>
+      <div class="note-menu">
+        <button class="icon-button" (click)="openDialogEditTitleNote(note)" aria-label="Edit title">
+          ✎
+        </button>
+        <button class="icon-button" (click)="openDialogDeleteNote(note)" aria-label="Delete note">
+          🗑
+        </button>
+      </div>
+    </div>
     }
   </article>
   }

@@ -1,14 +1,14 @@
 <main class="custom-container about-page">
-  <h2 class="mat-headline-medium" i18n="@@about.description">Descripción</h2>
-  <p class="mat-body-medium" i18n="@@about.description-text">
+  <h2 i18n="@@about.description">Descripción</h2>
+  <p i18n="@@about.description-text">
     Productiva Mente es una aplicación web para la gestión de tareas y notas
-    diseñada con la línea de diseño de Material.
+    con un diseño simple y minimalista.
   </p>
 
-  <h2 class="mat-headline-small" i18n="@@about.features">
+  <h3 i18n="@@about.features">
     Características Principales
-  </h2>
-  <p class="mat-body-medium" i18n="@@about.features-text">
+  </h3>
+  <p i18n="@@about.features-text">
     Productiva Mente es gratuita y de código abierto, permitiéndote usar y
     contribuir al proyecto sin costo alguno. Garantiza tu privacidad almacenando
     todos los datos localmente en tu navegador. Ofrece una experiencia sin
@@ -18,18 +18,16 @@
   </p>
 
   <div>
-    <p class="mat-body-medium" i18n="@@about.version">Versión: {{ version }}</p>
-    <p class="mat-body-medium" i18n="@@about.copyright">
+    <p i18n="@@about.version">Versión: {{ version }}</p>
+    <p i18n="@@about.copyright">
       © {{ currentYear }} Productiva Mente
     </p>
   </div>
   <button
-    mat-icon-button
     class="github-button"
-    color="primary"
     (click)="openGithub()"
     aria-label="Ver en GitHub"
   >
-    <mat-icon>code</mat-icon>
+    &lt;/&gt; Ver en GitHub
   </button>
 </main>

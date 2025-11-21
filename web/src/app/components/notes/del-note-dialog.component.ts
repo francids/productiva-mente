@@ -1,27 +1,27 @@
-import { Component, inject } from "@angular/core";
-import { MatButtonModule } from "@angular/material/button";
-import {
-  MAT_DIALOG_DATA,
-  MatDialogModule,
-  MatDialogRef,
-} from "@angular/material/dialog";
+import { Component } from "@angular/core";
+import { DialogRef } from "../../services/dialog.service";
 
 @Component({
   selector: "del-note-dialog",
   template: `
-    <h2 mat-dialog-title i18n="@@dialogs.delete-note">Eliminar nota</h2>
-    <mat-dialog-actions>
-      <button mat-button mat-dialog-close i18n="@@dialogs.cancel">
-        Cancelar
-      </button>
-      <button mat-button [mat-dialog-close]="true" i18n="@@dialogs.delete">
-        Eliminar
-      </button>
-    </mat-dialog-actions>
+    <div class="modal" (click)="$event.stopPropagation()">
+      <h2 class="modal-title" i18n="@@dialogs.delete-note">Eliminar nota</h2>
+      <div class="modal-content">
+        <p i18n="@@dialogs.delete-note-confirm">¿Estás seguro de que deseas eliminar esta nota?</p>
+      </div>
+      <div class="modal-actions">
+        <button class="secondary" (click)="dialogRef.close()" i18n="@@dialogs.cancel">
+          Cancelar
+        </button>
+        <button (click)="dialogRef.close(true)" i18n="@@dialogs.delete">
+          Eliminar
+        </button>
+      </div>
+    </div>
   `,
-  imports: [MatDialogModule, MatButtonModule],
+  imports: [],
 })
 export class DelNoteDialogComponent {
-  readonly dialogRef = inject(MatDialogRef<DelNoteDialogComponent>);
-  readonly data = inject(MAT_DIALOG_DATA);
+  dialogRef!: DialogRef;
+  data!: string;
 }

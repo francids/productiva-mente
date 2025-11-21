@@ -1,10 +1,6 @@
 // Angular
 import { Component, inject, signal } from "@angular/core";
-
-// Modules
-import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { MatDividerModule } from "@angular/material/divider";
-import { MatCardModule } from "@angular/material/card";
+import { CommonModule } from "@angular/common";
 
 // Services
 import { TitleService } from "../../services/title.service";
@@ -14,7 +10,7 @@ import { ThemeService } from "../../services/theme.service";
   selector: "settings-page",
   templateUrl: "./settings.component.html",
   styleUrl: "./settings.component.scss",
-  imports: [MatSlideToggleModule, MatDividerModule, MatCardModule],
+  imports: [CommonModule],
 })
 export class SettingsComponent {
   private readonly titleService = inject(TitleService);
@@ -32,14 +28,16 @@ export class SettingsComponent {
     this.isAutoMode.set(this.themeService.isAutoModeEnabled());
   }
 
-  toggleDarkMode(event: any): void {
-    this.themeService.toggleDarkMode(event.checked);
+  toggleDarkMode(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.themeService.toggleDarkMode(checked);
   }
 
-  toggleAutoMode(event: any): void {
-    this.isAutoMode.set(event.checked);
-    this.themeService.toggleAutoMode(event.checked);
-    if (!event.checked) {
+  toggleAutoMode(event: Event): void {
+    const checked = (event.target as HTMLInputElement).checked;
+    this.isAutoMode.set(checked);
+    this.themeService.toggleAutoMode(checked);
+    if (!checked) {
       this.isDarkMode.set(this.themeService.isDarkModeEnabled());
     }
   }

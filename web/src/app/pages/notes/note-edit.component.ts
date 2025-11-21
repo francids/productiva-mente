@@ -7,20 +7,14 @@ import {
   AfterViewInit,
 } from "@angular/core";
 import { ActivatedRoute, Router, RouterLink } from "@angular/router";
+import { CommonModule } from "@angular/common";
 
 // Services
 import { NotesService } from "../../services/notes.service";
 import { TitleService } from "../../services/title.service";
 import { ExportService } from "../../services/export.service";
-
-// Material Components
-import { MatDialog } from "@angular/material/dialog";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { MatToolbarModule } from "@angular/material/toolbar";
-import { MatMenuModule } from "@angular/material/menu";
-import { MatDividerModule } from "@angular/material/divider";
+import { DialogService } from "../../services/dialog.service";
+import { SnackbarService } from "../../services/snackbar.service";
 
 // Models
 import { Note } from "../../models/note.model";
@@ -37,13 +31,9 @@ import { EditorComponent } from "../../components/notes/editor.component";
   templateUrl: "./note-edit.component.html",
   styleUrl: "./note-edit.component.scss",
   imports: [
+    CommonModule,
     RouterLink,
-    MatButtonModule,
-    MatIconModule,
-    MatToolbarModule,
     EditorComponent,
-    MatMenuModule,
-    MatDividerModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -53,11 +43,12 @@ export class NoteEditComponent implements AfterViewInit {
   private readonly notesService = inject(NotesService);
   private readonly titleService = inject(TitleService);
   private readonly exportService = inject(ExportService);
+  private readonly dialog = inject(DialogService);
+  private readonly snackbar = inject(SnackbarService);
 
   noteId: string | undefined;
   note = signal<Note>({ id: "", title: "", content: "" });
-  readonly dialog = inject(MatDialog);
-  private _snackBar = inject(MatSnackBar);
+  showMenu = signal(false);
 
   ngAfterViewInit(): void {
     this.route.params.subscribe(async (params) => {
@@ -84,14 +75,20 @@ export class NoteEditComponent implements AfterViewInit {
 
   async exportNote(): Promise<void> {
     await this.exportService.generateNoteFile(this.note().id);
+    this.showMenu.set(false);
+  }
+
+  toggleMenu(): void {
+    this.showMenu.update(v => !v);
   }
 
   openDialogEditTitleNote(): void {
+    this.showMenu.set(false);
     const dialogRef = this.dialog.open(EditTitleNoteDialogComponent, {
       data: { title: this.note().title },
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().then((result) => {
       if (result !== undefined) {
         this.notesService.updateNote(this.note().id, {
           id: this.note().id,
@@ -100,7 +97,7 @@ export class NoteEditComponent implements AfterViewInit {
         });
         this.note.set({ ...this.note(), title: result });
         this.titleService.updateTitle(result);
-        this._snackBar.open(
+        this.snackbar.open(
           $localize`:@@notes.note-title-edited:Título de la nota editado`,
           $localize`:@@common.ok:Cerrar`,
           { duration: 2000 }
@@ -110,12 +107,13 @@ export class NoteEditComponent implements AfterViewInit {
   }
 
   openDialogDeleteNote(): void {
+    this.showMenu.set(false);
     const dialogRef = this.dialog.open(DelNoteDialogComponent);
 
-    dialogRef.afterClosed().subscribe((result) => {
+    dialogRef.afterClosed().then((result) => {
       if (result === true) {
         this.notesService.deleteNote(this.note().id);
-        this._snackBar.open(
+        this.snackbar.open(
           $localize`:@@notes.note-deleted:Nota eliminada`,
           $localize`:@@common.ok:Cerrar`,
           { duration: 2000 }
