@@ -1,7 +1,7 @@
 <main>
   <header class="note-toolbar">
     <button class="icon-button" routerLink="/notes" aria-label="Back">
-      ←
+      <span class="material-symbols-outlined">arrow_back</span>
     </button>
     <span class="spacer"></span>
     <button class="title-button" (click)="openDialogEditTitleNote()">
@@ -10,21 +10,21 @@
     <span class="spacer"></span>
     <div class="menu-container">
       <button class="icon-button" (click)="toggleMenu()" aria-label="Menu">
-        ⋮
+        <span class="material-symbols-outlined">more_vert</span>
       </button>
       @if (showMenu()) {
       <div class="dropdown-menu">
         <button (click)="openDialogEditTitleNote()">
-          <span>✎</span>
+          <span class="material-symbols-outlined">edit</span>
           <span i18n="@@notes.edit-title">Editar título</span>
         </button>
         <button (click)="openDialogDeleteNote()">
-          <span>🗑</span>
+          <span class="material-symbols-outlined">delete</span>
           <span i18n="@@notes.delete-note">Eliminar nota</span>
         </button>
         <hr>
         <button (click)="exportNote()">
-          <span>⬇</span>
+          <span class="material-symbols-outlined">download</span>
           <span i18n="@@notes.export-note">Exportar nota</span>
         </button>
       </div>

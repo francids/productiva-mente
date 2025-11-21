@@ -1,7 +1,11 @@
 <main class="custom-container">
-  <button class="fab-button" (click)="openDialogCreateTask()" aria-label="Add task">
-    +
-  </button>
+  <div class="page-header">
+    <h2 i18n="@@tasks">Tareas</h2>
+    <button (click)="openDialogCreateTask()" aria-label="Add task">
+      <span class="material-symbols-outlined">add</span>
+      <span i18n="@@tasks.new">Nueva tarea</span>
+    </button>
+  </div>
 
   @if (tasks().length === 0) {
   <div class="no-tasks">
@@ -16,19 +20,19 @@
         <th (click)="sortBy('title')" class="sortable">
           <span i18n="@@tasks.title">Título</span>
           @if (sortColumn() === 'title') {
-            <span class="sort-icon">{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+            <span class="material-symbols-outlined sort-icon">{{ sortDirection() === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</span>
           }
         </th>
         <th (click)="sortBy('description')" class="sortable">
           <span i18n="@@tasks.description">Descripción</span>
           @if (sortColumn() === 'description') {
-            <span class="sort-icon">{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+            <span class="material-symbols-outlined sort-icon">{{ sortDirection() === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</span>
           }
         </th>
         <th (click)="sortBy('status')" class="sortable">
           <span i18n="@@tasks.status">Estado</span>
           @if (sortColumn() === 'status') {
-            <span class="sort-icon">{{ sortDirection() === 'asc' ? '↑' : '↓' }}</span>
+            <span class="material-symbols-outlined sort-icon">{{ sortDirection() === 'asc' ? 'arrow_upward' : 'arrow_downward' }}</span>
           }
         </th>
         <th i18n="@@tasks.actions">Acciones</th>
@@ -47,10 +51,10 @@
         </td>
         <td class="actions">
           <button class="icon-button" (click)="openDialogEditTask(task)" aria-label="Edit task">
-            ✎
+            <span class="material-symbols-outlined">edit</span>
           </button>
           <button class="icon-button" (click)="openDialogDeleteTask(task.id)" aria-label="Delete task">
-            🗑
+            <span class="material-symbols-outlined">delete</span>
           </button>
         </td>
       </tr>

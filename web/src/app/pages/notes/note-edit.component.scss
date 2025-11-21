@@ -79,6 +79,11 @@ main section {
   align-items: center;
   gap: 0.75rem;
   cursor: pointer;
+  color: var(--text-primary);
+}
+
+.dropdown-menu button .material-symbols-outlined {
+  font-size: 20px;
 }
 
 .dropdown-menu button:hover {

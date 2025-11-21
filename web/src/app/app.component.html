@@ -11,7 +11,7 @@
         <app-logo width="100%" height="20px"></app-logo>
       </a>
       <button class="icon-button" (click)="closeSidenav()" aria-label="Close menu">
-        ✕
+        <span class="material-symbols-outlined">close</span>
       </button>
     </div>
     <hr>
@@ -22,7 +22,7 @@
           (click)="closeSidenav()"
           [class.active]="currentRoute() === '/'"
         >
-          <span class="nav-icon">🏠</span>
+          <span class="material-symbols-outlined">home</span>
           <span i18n="@@home">Inicio</span>
         </a>
       </li>
@@ -32,7 +32,7 @@
           (click)="closeSidenav()"
           [class.active]="currentRoute() === '/notes'"
         >
-          <span class="nav-icon">📝</span>
+          <span class="material-symbols-outlined">note</span>
           <span i18n="@@notes">Notas</span>
         </a>
       </li>
@@ -42,7 +42,7 @@
           (click)="closeSidenav()"
           [class.active]="currentRoute() === '/tasks'"
         >
-          <span class="nav-icon">✓</span>
+          <span class="material-symbols-outlined">task_alt</span>
           <span i18n="@@tasks">Tareas</span>
         </a>
       </li>
@@ -55,7 +55,7 @@
           (click)="closeSidenav()"
           [class.active]="currentRoute() === '/settings'"
         >
-          <span class="nav-icon">⚙</span>
+          <span class="material-symbols-outlined">settings</span>
           <span i18n="@@settings">Configuración</span>
         </a>
       </li>
@@ -68,7 +68,7 @@
           (click)="closeSidenav()"
           [class.active]="currentRoute() === '/about'"
         >
-          <span class="nav-icon">ℹ</span>
+          <span class="material-symbols-outlined">info</span>
           <span i18n="@@about">Acerca de</span>
         </a>
       </li>
@@ -78,7 +78,7 @@
           target="_blank"
           (click)="closeSidenav()"
         >
-          <span class="nav-icon">&lt;/&gt;</span>
+          <span class="material-symbols-outlined">code</span>
           <span i18n="@@sourceCode">Código fuente</span>
         </a>
       </li>
@@ -90,7 +90,7 @@
     @if (!isEditPage()) {
     <header class="toolbar">
       <button class="icon-button" (click)="toggleSidenav()" aria-label="Toggle menu">
-        ☰
+        <span class="material-symbols-outlined">menu</span>
       </button>
       @if (title() === "Productiva Mente") {
       <app-logo width="100%" height="18px"></app-logo>

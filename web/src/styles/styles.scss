@@ -1,6 +1,25 @@
 @use "@milkdown/theme-nord/style.css";
 @use "./editor.component.scss";
 
+/* Material Symbols */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'liga';
+}
+
 /* CSS Variables for Light Theme */
 :root {
   --bg-primary: #ffffff;
@@ -51,28 +70,10 @@ body {
 }
 
 .custom-container {
-  padding: 0 1rem;
+  padding: 1rem;
   width: 100%;
-
-  @media (min-width: 576px) {
-    width: 500px;
-  }
-
-  @media (min-width: 768px) {
-    width: 680px;
-  }
-
-  @media (min-width: 992px) {
-    width: 920px;
-  }
-
-  @media (min-width: 1200px) {
-    width: 1100px;
-  }
-
-  @media (min-width: 1400px) {
-    width: 1280px;
-  }
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 /* Typography */
@@ -93,7 +94,7 @@ p {
 
 /* Buttons */
 button {
-  padding: 0.5rem 1rem;
+  padding: 0.625rem 1.25rem;
   background-color: var(--accent-color);
   color: white;
   border: none;
@@ -102,6 +103,11 @@ button {
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease;
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
 button:hover {
@@ -127,7 +133,9 @@ button.icon-button {
   background: none;
   color: var(--text-primary);
   padding: 0.5rem;
-  min-width: auto;
+  min-width: 40px;
+  min-height: 40px;
+  border-radius: 50%;
 }
 
 button.icon-button:hover {
@@ -138,13 +146,14 @@ button.icon-button:hover {
 input,
 textarea,
 select {
-  padding: 0.5rem;
+  padding: 0.625rem 0.75rem;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   border: 1px solid var(--border-color);
   border-radius: 4px;
   font-size: 0.875rem;
   font-family: inherit;
+  min-height: 40px;
 }
 
 input:focus,

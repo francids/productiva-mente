@@ -11,20 +11,15 @@ main {
   user-select: none;
 }
 
-.fab-button {
-  position: fixed;
-  bottom: 1rem;
-  right: 1rem;
-  z-index: 100;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  font-size: 2rem;
-  padding: 0;
+.page-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  justify-content: center;
-  box-shadow: 0 4px 12px var(--shadow);
+  margin-bottom: 1.5rem;
+}
+
+.page-header h2 {
+  margin: 0;
 }
 
 .no-tasks {
@@ -51,10 +46,12 @@ th.sortable:hover {
 }
 
 .sort-icon {
-  margin-left: 0.5rem;
+  font-size: 16px;
+  vertical-align: middle;
+  margin-left: 0.25rem;
 }
 
 .actions {
   display: flex;
-  gap: 0.5rem;
+  gap: 0.25rem;
 }

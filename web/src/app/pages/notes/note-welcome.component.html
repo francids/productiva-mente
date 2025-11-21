@@ -1,10 +1,14 @@
 <main>
-  <button class="fab-button" (click)="openDialogCreateNote()" aria-label="Add note">
-    +
-  </button>
+  <div class="page-header">
+    <h2 i18n="@@notes">Notas</h2>
+    <button (click)="openDialogCreateNote()" aria-label="Add note">
+      <span class="material-symbols-outlined">add</span>
+      <span i18n="@@notes.new">Nueva nota</span>
+    </button>
+  </div>
 
   @if (notes().length === 0) {
-  <article>
+  <article class="empty-state">
     <p i18n="@@notes.no-notes">
       No tienes notas creadas, crea una nueva nota para empezar.
     </p>
@@ -15,17 +19,16 @@
     <div class="note card">
       <div
         class="card-note"
-        (mousedown)="onMouseDown($event, note.id)"
-        (mouseup)="onMouseUp($event, note.id)"
+        (click)="onMouseUp($event, note.id)"
       >
         <div class="note-content">{{ note.title }}</div>
       </div>
       <div class="note-menu">
         <button class="icon-button" (click)="openDialogEditTitleNote(note)" aria-label="Edit title">
-          ✎
+          <span class="material-symbols-outlined">edit</span>
         </button>
         <button class="icon-button" (click)="openDialogDeleteNote(note)" aria-label="Delete note">
-          🗑
+          <span class="material-symbols-outlined">delete</span>
         </button>
       </div>
     </div>

@@ -3,7 +3,9 @@
   "translations": {
     "home": "Home",
     "notes": "Notes",
+    "notes.new": "New note",
     "tasks": "Tasks",
+    "tasks.new": "New task",
     "settings": "Settings",
     "about": "About",
     "sourceCode": "Source Code",
